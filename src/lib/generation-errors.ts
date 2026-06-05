@@ -17,8 +17,8 @@ export function generationFailurePayload(error: unknown): GenerationFailurePaylo
     normalized.includes("401")
   ) {
     return {
-      code: "openai_auth_error",
-      error: "OpenAI API Key invalid or missing. Check OPENAI_API_KEY."
+      code: "openrouter_auth_error",
+      error: "OpenRouter API Key invalid or missing. Check OPENROUTER_API_KEY."
     };
   }
 
@@ -29,8 +29,8 @@ export function generationFailurePayload(error: unknown): GenerationFailurePaylo
     normalized.includes("throttl")
   ) {
     return {
-      code: "openai_quota_error",
-      error: "OpenAI account quota, balance, or rate limit is not enough. Check billing or retry later."
+      code: "openrouter_quota_error",
+      error: "OpenRouter account quota, balance, or rate limit is not enough. Check billing or retry later."
     };
   }
 
@@ -40,20 +40,20 @@ export function generationFailurePayload(error: unknown): GenerationFailurePaylo
     normalized.includes("does not exist")
   ) {
     return {
-      code: "openai_model_error",
-      error: "OpenAI image model is unavailable or the account lacks permission. Check OPENAI_IMAGE_MODEL and model access."
+      code: "openrouter_model_error",
+      error: "OpenRouter image model is unavailable or the account lacks permission. Check OPENROUTER_IMAGE_MODEL and model access."
     };
   }
 
   if (
     normalized.includes("image url") ||
     normalized.includes("reference image") ||
-    normalized.includes("signed url") ||
+    normalized.includes("invalid image") ||
     normalized.includes("not accessible")
   ) {
     return {
-      code: "openai_image_error",
-      error: "OpenAI could not process the reference image. Check the file format and try again."
+      code: "openrouter_image_error",
+      error: "OpenRouter could not process the reference image. Check the file format and try again."
     };
   }
 
@@ -64,13 +64,13 @@ export function generationFailurePayload(error: unknown): GenerationFailurePaylo
     normalized.includes("fetch failed")
   ) {
     return {
-      code: "openai_connection_error",
-      error: "Connection to OpenAI failed. Check network, proxy settings, or retry later."
+      code: "openrouter_connection_error",
+      error: "Connection to OpenRouter failed. Check network, proxy settings, or retry later."
     };
   }
 
   return {
     code: "generation_failed",
-    error: "Generation failed. Check OpenAI configuration, model access, or retry later."
+    error: "Generation failed. Check OpenRouter configuration, model access, or retry later."
   };
 }

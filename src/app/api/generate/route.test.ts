@@ -10,7 +10,7 @@ const mocks = vi.hoisted(() => ({
   refundGenerationCredit: vi.fn(),
   buildStoragePath: vi.fn(),
   uploadPrivateFile: vi.fn(),
-  createOpenAIClient: vi.fn(),
+  createOpenRouterClient: vi.fn(),
   generateImage: vi.fn()
 }));
 
@@ -40,8 +40,8 @@ vi.mock("@/lib/storage", async (importOriginal) => {
   };
 });
 
-vi.mock("@/lib/openai-images", () => ({
-  createOpenAIClient: mocks.createOpenAIClient,
+vi.mock("@/lib/openrouter-images", () => ({
+  createOpenRouterClient: mocks.createOpenRouterClient,
   generateImage: mocks.generateImage
 }));
 
@@ -94,8 +94,10 @@ describe("POST /api/generate", () => {
     });
 
     mocks.getEnv.mockReturnValue({
-      OPENAI_API_KEY: "openai-key",
-      OPENAI_IMAGE_MODEL: "gpt-image-2",
+      OPENROUTER_API_KEY: "openrouter-key",
+      OPENROUTER_IMAGE_MODEL: "openai/gpt-5.4-image-2",
+      OPENROUTER_API_BASE_URL: "https://openrouter.ai/api/v1",
+      OPENROUTER_APP_TITLE: "PromptCanvas 3.0",
       NEXT_PUBLIC_SUPABASE_URL: "https://supabase.example.com",
       NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
       SUPABASE_SERVICE_ROLE_KEY: "service-role-key",
@@ -104,7 +106,7 @@ describe("POST /api/generate", () => {
 
     mocks.reserveGenerationCredit.mockResolvedValue(true);
     mocks.uploadPrivateFile.mockResolvedValue(undefined);
-    mocks.createOpenAIClient.mockReturnValue({ provider: "openai-client" });
+    mocks.createOpenRouterClient.mockReturnValue({ provider: "openrouter-client" });
     mocks.generateImage.mockResolvedValue(Buffer.from("generated-png"));
     mocks.buildStoragePath.mockImplementation((_userId: string, generationId: string, filename: string) =>
       `user-1/${generationId}/${filename}`
@@ -121,7 +123,7 @@ describe("POST /api/generate", () => {
     await expect(response.json()).resolves.toEqual({ error: "Subject is required" });
   });
 
-  test("uploads reference image, sends OpenAI GPT Image 2 request, and stores generated PNG", async () => {
+  test("uploads reference image, sends OpenRouter GPT-5.4 Image 2 request, and stores generated PNG", async () => {
     const admin = createAdminClient();
     mocks.createSupabaseAdminClient.mockReturnValue(admin.client);
     const referenceImage = new File([Buffer.from("reference")], "ref.png", { type: "image/png" });
@@ -141,10 +143,14 @@ describe("POST /api/generate", () => {
       referenceImage,
       "image/png"
     );
-    expect(mocks.createOpenAIClient).toHaveBeenCalledWith("openai-key");
+    expect(mocks.createOpenRouterClient).toHaveBeenCalledWith("openrouter-key", {
+      appTitle: "PromptCanvas 3.0",
+      appUrl: "http://localhost:3000",
+      baseUrl: "https://openrouter.ai/api/v1"
+    });
     expect(mocks.generateImage).toHaveBeenCalledWith({
-      client: { provider: "openai-client" },
-      model: "gpt-image-2",
+      client: { provider: "openrouter-client" },
+      model: "openai/gpt-5.4-image-2",
       prompt: expect.stringContaining("iced coffee product photo"),
       aspectRatio: "16:9",
       referenceImage
@@ -178,10 +184,10 @@ describe("POST /api/generate", () => {
     expect(mocks.reserveGenerationCredit).not.toHaveBeenCalled();
   });
 
-  test("refunds credit when OpenAI generation fails", async () => {
+  test("refunds credit when OpenRouter generation fails", async () => {
     const admin = createAdminClient();
     mocks.createSupabaseAdminClient.mockReturnValue(admin.client);
-    mocks.generateImage.mockRejectedValue(new Error("OpenAI failed"));
+    mocks.generateImage.mockRejectedValue(new Error("OpenRouter failed"));
     const form = new FormData();
     form.set("subject", "iced coffee");
 
@@ -191,7 +197,7 @@ describe("POST /api/generate", () => {
     expect(mocks.refundGenerationCredit).toHaveBeenCalledWith(admin.client, "user-1", "generation-1");
   });
 
-  test("stores sanitized OpenAI failure instead of raw provider details", async () => {
+  test("stores sanitized OpenRouter failure instead of raw provider details", async () => {
     const admin = createAdminClient();
     mocks.createSupabaseAdminClient.mockReturnValue(admin.client);
     mocks.generateImage.mockRejectedValue(new Error(
@@ -204,12 +210,12 @@ describe("POST /api/generate", () => {
 
     expect(response.status).toBe(500);
     await expect(response.json()).resolves.toEqual({
-      code: "openai_image_error",
-      error: "OpenAI could not process the reference image. Check the file format and try again."
+      code: "openrouter_image_error",
+      error: "OpenRouter could not process the reference image. Check the file format and try again."
     });
     expect(admin.update).toHaveBeenLastCalledWith(expect.objectContaining({
       status: "failed",
-      error_message: "OpenAI could not process the reference image. Check the file format and try again."
+      error_message: "OpenRouter could not process the reference image. Check the file format and try again."
     }));
     expect(admin.update).not.toHaveBeenCalledWith(expect.objectContaining({
       error_message: expect.stringContaining("secret-token")

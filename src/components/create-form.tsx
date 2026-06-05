@@ -27,8 +27,8 @@ const formCopy = {
   zh: {
     authExpired: "登录状态已过期，请重新登录后再生成。",
     insufficientCredits: "积分不足，请先充值积分。",
-    generationFailed: "生成失败，请检查 OpenAI 配置、模型权限或稍后重试。",
-    genericFailed: "生成失败，请检查 OpenAI 配置或稍后重试。",
+    generationFailed: "生成失败，请检查 OpenRouter 配置、模型权限或稍后重试。",
+    genericFailed: "生成失败，请检查 OpenRouter 配置或稍后重试。",
     networkFailed: "网络请求失败，请确认本地服务正在运行后再试。",
     success: "生成成功，图片已保存到历史记录。",
     fallbackSubject: "一只穿着宇航服的橘猫",
@@ -67,8 +67,8 @@ const formCopy = {
   en: {
     authExpired: "Your login session has expired. Please log in again before generating.",
     insufficientCredits: "Not enough credits. Please recharge first.",
-    generationFailed: "Generation failed. Check OpenAI configuration, model access, or try again later.",
-    genericFailed: "Generation failed. Check OpenAI configuration or try again later.",
+    generationFailed: "Generation failed. Check OpenRouter configuration, model access, or try again later.",
+    genericFailed: "Generation failed. Check OpenRouter configuration or try again later.",
     networkFailed: "Network request failed. Make sure the local service is running and try again.",
     success: "Generation succeeded. The image has been saved to history.",
     fallbackSubject: "An orange cat in an astronaut suit",

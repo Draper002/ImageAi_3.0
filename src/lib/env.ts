@@ -2,12 +2,14 @@ const requiredKeys = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
   "SUPABASE_SERVICE_ROLE_KEY",
-  "OPENAI_API_KEY",
+  "OPENROUTER_API_KEY",
   "NEXT_PUBLIC_APP_URL"
 ] as const;
 
 const optionalDefaults = {
-  OPENAI_IMAGE_MODEL: "gpt-image-2"
+  OPENROUTER_IMAGE_MODEL: "openai/gpt-5.4-image-2",
+  OPENROUTER_API_BASE_URL: "https://openrouter.ai/api/v1",
+  OPENROUTER_APP_TITLE: "PromptCanvas 3.0"
 } as const;
 
 export type AppEnv = Record<(typeof requiredKeys)[number], string> &

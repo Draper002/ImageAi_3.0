@@ -3,7 +3,7 @@ import { reserveGenerationCredit, refundGenerationCredit } from "@/lib/credits";
 import { getEnv } from "@/lib/env";
 import { generationFailurePayload } from "@/lib/generation-errors";
 import { parseGenerateForm } from "@/lib/generate-form";
-import { createOpenAIClient, generateImage } from "@/lib/openai-images";
+import { createOpenRouterClient, generateImage } from "@/lib/openrouter-images";
 import { buildPrompt } from "@/lib/prompt-builder";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -64,10 +64,14 @@ export async function POST(request: Request) {
       await uploadPrivateFile(admin, "reference-images", referencePath, parsed.referenceImage, parsed.referenceImage.type);
     }
 
-    const openai = createOpenAIClient(env.OPENAI_API_KEY);
+    const openrouter = createOpenRouterClient(env.OPENROUTER_API_KEY, {
+      baseUrl: env.OPENROUTER_API_BASE_URL,
+      appUrl: env.NEXT_PUBLIC_APP_URL,
+      appTitle: env.OPENROUTER_APP_TITLE
+    });
     const imageBytes = await generateImage({
-      client: openai,
-      model: env.OPENAI_IMAGE_MODEL,
+      client: openrouter,
+      model: env.OPENROUTER_IMAGE_MODEL,
       prompt: prompt.submittedPrompt,
       aspectRatio: parsed.aspectRatio ?? "1:1",
       referenceImage: parsed.referenceImage

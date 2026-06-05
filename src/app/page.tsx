@@ -30,7 +30,7 @@ const copy = {
     start: "开始生成",
     eyebrow: "面向创作者和小团队的 AI 图片 SaaS",
     headline: "不会写复杂 prompt，也能稳定产出好图片",
-    subhead: "选择图片类型、尺寸、风格、场景和留白要求，再写下主体。PromptCanvas 会把这些信息整理成专业 prompt，并交给 OpenAI GPT Image 2 生成图片。",
+    subhead: "选择图片类型、尺寸、风格、场景和留白要求，再写下主体。PromptCanvas 会把这些信息整理成专业 prompt，并交给 OpenRouter / OpenAI GPT-5.4 Image 2 生成图片。",
     trial: "免费试用 2 次",
     loginAccount: "登录账号",
     values: [
@@ -59,7 +59,7 @@ const copy = {
     start: "Start creating",
     eyebrow: "AI image SaaS for creators and small teams",
     headline: "Create usable AI images without writing complex prompts",
-    subhead: "Choose image type, size, style, scene, and whitespace, then describe your subject. PromptCanvas turns the inputs into a professional prompt and sends it to OpenAI GPT Image 2.",
+    subhead: "Choose image type, size, style, scene, and whitespace, then describe your subject. PromptCanvas turns the inputs into a professional prompt and sends it to OpenRouter / OpenAI GPT-5.4 Image 2.",
     trial: "Try 2 credits free",
     loginAccount: "Log in",
     values: [

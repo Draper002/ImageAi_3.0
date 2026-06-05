@@ -1,6 +1,6 @@
 # PromptCanvas 3.0
 
-AI image SaaS built from the 2.0 business flow, with image generation switched to OpenAI GPT Image 2 (`gpt-image-2`). Users can enter a subject, choose image type, ratio, style, scene, whitespace, and optionally upload one reference image. Supabase stores accounts, credits, history, and private images.
+AI image SaaS built from the 2.0 business flow, with image generation switched to OpenRouter routing for OpenAI GPT-5.4 Image 2 (`openai/gpt-5.4-image-2`). Users can enter a subject, choose image type, ratio, style, scene, whitespace, and optionally upload one reference image. Supabase stores accounts, credits, history, and private images.
 
 ## Local Development
 
@@ -16,7 +16,7 @@ npm.cmd install --cache .npm-cache
 copy docs\env.example .env.local
 ```
 
-3. Fill `.env.local` with Supabase, OpenAI, Alipay, and admin values.
+3. Fill `.env.local` with Supabase, OpenRouter, Alipay, and admin values.
 
 4. Start the dev server:
 
@@ -33,11 +33,13 @@ http://127.0.0.1:3000
 ## Required Provider Variables
 
 ```text
-OPENAI_API_KEY=your-openai-api-key
-OPENAI_IMAGE_MODEL=gpt-image-2
+OPENROUTER_API_KEY=your-openrouter-api-key
+OPENROUTER_IMAGE_MODEL=openai/gpt-5.4-image-2
+OPENROUTER_API_BASE_URL=https://openrouter.ai/api/v1
+OPENROUTER_APP_TITLE=PromptCanvas 3.0
 ```
 
-`OPENAI_IMAGE_MODEL` is optional in code and defaults to `gpt-image-2`.
+`OPENROUTER_IMAGE_MODEL` is optional in code and defaults to `openai/gpt-5.4-image-2`.
 
 ## Supabase
 

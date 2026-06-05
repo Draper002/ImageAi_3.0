@@ -102,7 +102,7 @@ describe("CreateForm", () => {
     expect(screen.getByRole("button", { name: "生成图片" })).toBeEnabled();
   });
 
-  test("shows OpenAI generic copy when an API failure is not JSON", async () => {
+  test("shows OpenRouter generic copy when an API failure is not JSON", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
       ok: false,
       status: 500,
@@ -116,7 +116,7 @@ describe("CreateForm", () => {
     fireEvent.change(screen.getByRole("textbox", { name: "Subject, for example: an orange cat in an astronaut suit outside a moon cafe" }), { target: { value: "A red espresso machine" } });
     fireEvent.click(screen.getByRole("button", { name: "Generate image" }));
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("OpenAI");
+    expect(await screen.findByRole("alert")).toHaveTextContent("OpenRouter");
     expect(screen.getByRole("button", { name: "Generate image" })).toBeEnabled();
   });
 
